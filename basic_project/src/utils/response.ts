@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { Response } from 'express';
 import { mongo } from 'mongoose';
 
