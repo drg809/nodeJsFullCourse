@@ -1,11 +1,5 @@
 import { Response } from 'express';
-import { mongo, Types } from 'mongoose';
-
-export const validateObjectId = (id: string): void => {
-  if (!Types.ObjectId.isValid(id)) {
-    throw { code: 400, message: `Id no válido ${id}` };
-  }
-};
+import { mongo } from 'mongoose';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const sendError = (res: Response, e: any): void => {

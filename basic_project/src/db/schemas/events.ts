@@ -1,4 +1,4 @@
-import { Schema, Document, model, ObjectId } from 'mongoose';
+import { Schema, Document, model, Types } from 'mongoose';
 import { User } from './user';
 
 interface Event extends Document {
@@ -6,7 +6,7 @@ interface Event extends Document {
    date: string,
    description: string,
    type?: boolean,
-   creator: ObjectId | User
+   creator: Types.ObjectId | User
 }
 
 const schema = new Schema({

@@ -1,9 +1,12 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import { Types } from 'mongoose';
+import jwt from 'jsonwebtoken';
 
-import Users from '../../db/schemas/user';
-import { validateObjectId, sendError } from '../../utils/response';
+import Users, { User } from '../../db/schemas/user';
+import { sendError } from '../../utils/response';
+
 import Events from '../../db/schemas/events';
 
 export const getUsers = async (req: Request, res: Response): Promise<void> => {
@@ -17,7 +20,7 @@ export const getUserById = async (
 ): Promise<void> => {
   try {
     const id: string = req.params.id;
-    validateObjectId(id);
+
     const user = await Users.findById(Types.ObjectId(id)).select({
       password: 0,
       __v: 0,
@@ -60,16 +63,41 @@ export const deleteUser = async (
 ): Promise<void> => {
   try {
     const id: string = req.params.id;
-    validateObjectId(id);
-
+    
     const user = await Users.findByIdAndDelete(id);
 
     if (user) {
-      await Events.deleteMany({creator: user._id});
+      await Events.deleteMany({ creator: user._id });
       res.send('Usuario eliminado');
     } else {
       res.status(404).send({});
     }
+  } catch (e) {
+    sendError(res, e);
+  }
+};
+
+export const login = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { email, password } = req.body;
+
+    const user: User | null = await Users.findOne({ email });
+    if (!user) {
+      throw { code: 404, message: 'Usuario no encontrado.' };
+    }
+
+    const isOk: boolean = await bcrypt.compare(password, user.password);
+    if (!isOk) {
+      throw { code: 401, message: 'Contraseña incorrecta.' };
+    }
+
+    const token = jwt.sign(
+      { userId: user._id, email: user.email },
+      process.env.JWT_SECRET!,
+      { expiresIn: 72000 }
+    );
+
+    res.send({ token: token, expiresIn: 72000 });
   } catch (e) {
     sendError(res, e);
   }
