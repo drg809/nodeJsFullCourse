@@ -3,7 +3,10 @@ import * as usersController from '../../controllers/v1/users-controllers';
 import { checkAuth, checkIp } from '../../middlewares/auth-middleware';
 import { handleRequestErrors } from '../../middlewares/validator-middleware';
 import { validateObjectId } from '../../validators/v1/general-validator';
-import { validateUser } from '../../validators/v1/users-validators';
+import {
+  validateProfile,
+  validateUser,
+} from '../../validators/v1/users-validators';
 
 const router = Router();
 
@@ -32,5 +35,12 @@ router.delete(
   usersController.deleteUser
 );
 router.post('/login', validateUser, handleRequestErrors, usersController.login);
+router.patch(
+  '',
+  checkAuth,
+  validateProfile,
+  handleRequestErrors,
+  usersController.updateProfile
+);
 
 export default router;

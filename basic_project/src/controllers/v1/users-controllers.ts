@@ -11,7 +11,7 @@ import Events from '../../db/schemas/events';
 
 export const getUsers = async (req: Request, res: Response): Promise<void> => {
   const users = await Users.find().select({ password: 0, __v: 0 });
-  res.send(users);
+  res.send({ data: users });
 };
 
 export const getUserById = async (
@@ -27,7 +27,7 @@ export const getUserById = async (
     });
 
     if (user) {
-      res.send(user);
+      res.send({ data: user });
     } else {
       res.status(404).send({});
     }
@@ -51,7 +51,34 @@ export const createUser = async (
       password: hash,
     });
 
-    res.send(newUser);
+    res.send({ data: newUser });
+  } catch (e) {
+    sendError(res, e);
+  }
+};
+
+export const updateProfile = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { first_name, last_name, avatar } = req.body;
+    const { userId } = req.session;
+
+    const user = await Users.findOne({
+      _id: userId,
+    }).select({ password: 0, __v: 0 });
+
+    if (user) {
+      user.first_name = first_name || user.first_name;
+      user.last_name = last_name || user.last_name;
+      user.avatar = avatar || user.avatar;
+
+      await user.save();
+      res.send({ data: user });
+    } else {
+      res.status(404).send({});
+    }
   } catch (e) {
     sendError(res, e);
   }
@@ -63,7 +90,7 @@ export const deleteUser = async (
 ): Promise<void> => {
   try {
     const id: string = req.params.id;
-    
+
     const user = await Users.findByIdAndDelete(id);
 
     if (user) {
@@ -78,6 +105,7 @@ export const deleteUser = async (
 };
 
 export const login = async (req: Request, res: Response): Promise<void> => {
+  console.log(req.body);
   try {
     const { email, password } = req.body;
 

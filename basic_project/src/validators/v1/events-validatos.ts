@@ -3,7 +3,6 @@ import { checkSchema, ParamSchema, Schema } from 'express-validator';
 const createEventSchema = (isStrict: boolean): Schema => {
   const nameSchema: ParamSchema = {
     isString: true,
-    toInt: true,
     isLength: {
       options: { min: 2 },
     },
@@ -18,7 +17,7 @@ const createEventSchema = (isStrict: boolean): Schema => {
   };
   const descriptionSchema: ParamSchema = {
     isString: true,
-    errorMessage: 'El fecha debe ser un texto.',
+    errorMessage: 'La descripción debe ser un texto.',
   };
   if (!isStrict) {
     const optional = {

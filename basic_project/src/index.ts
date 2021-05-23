@@ -2,6 +2,8 @@ import express, { Application, Request, Response } from 'express';
 import {urlencoded, json} from 'body-parser';
 import dotenv from 'dotenv';
 import connectToDB from './db/connection';
+import path from 'path';
+import cors from 'cors';
 
 import apiV1 from './routes/v1';
 
@@ -11,9 +13,13 @@ dotenv.config();
 const PORT: string = process.env.PORT!;
 const app: Application = express();
 
+app.use(cors({
+    origin: ['http://localhost:5000']
+}));
 app.use(urlencoded({ extended: false }));
 app.use(json());
 
+app.get('/', (req,res)=>res.sendFile(path.join(__dirname, 'views/index.html')));
 apiV1(app);
 
 app.use((req: Request, res: Response) => {

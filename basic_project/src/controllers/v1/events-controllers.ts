@@ -9,14 +9,14 @@ export const getEvents = async (req: Request, res: Response): Promise<void> => {
   const total: number = await Events.estimatedDocumentCount();
   const start: number = (page - 1) * itemPerPage;
 
-  const products = await Events.find().skip(start).limit(itemPerPage);
+  const events = await Events.find().skip(start).limit(itemPerPage);
 
   res.send({
     page: page,
     per_page: itemPerPage,
     total: total,
     total_pages: Math.ceil(total / itemPerPage),
-    data: products,
+    data: events,
   });
 };
 
@@ -52,7 +52,7 @@ export const createEvent = async (
       creator: userId,
     });
 
-    res.send(event);
+    res.send({ data: event });
   } catch (e) {
     sendError(res, e);
   }
