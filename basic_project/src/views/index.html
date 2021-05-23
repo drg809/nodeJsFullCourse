@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <section>
+        <article>
+            <form id="loginForm">
+                <input id="email" type="email" name="email" placeholder="email" required />
+                <input id="password" type="password" name="password" placeholder="password" required />
+                <button type="submit">send</button>
+            </form>
+        </article>
+    </section>
+
+</body>
+<script>
+    const formElement = document.getElementById('loginForm');
+    formElement.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const request = new XMLHttpRequest();
+        request.open('POST', 'http://localhost:3000/api/v1/users/login');
+        request.setRequestHeader("Content-Type", "application/json");
+
+        request.send(JSON.stringify({
+            "email": document.getElementById('email').value,
+            "password": document.getElementById('password').value
+        }));
+        request.onload = (_) => {
+            if (request.status === 200) {
+                console.log(request.responseText);
+            } else {
+                console.log(request.status);
+            }
+        }
+    });
+</script>
+
+</html>
