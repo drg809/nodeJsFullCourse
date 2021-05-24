@@ -59,9 +59,10 @@ export const subscribeParticipant = async (
 ): Promise<void> => {
   try {
     const { userId } = req.session;
-    const { eventId, details } = req.body;
+    const { event, details } = req.body;
+    console.log(event);
     const participant = await Participants.create({
-      event: eventId,
+      event: event,
       user: userId,
       details,
     });
