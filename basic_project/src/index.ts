@@ -13,9 +13,10 @@ dotenv.config();
 const PORT: string = process.env.PORT!;
 const app: Application = express();
 
-app.use(cors({
-    origin: ['http://localhost:5000']
-}));
+// app.use(cors({
+//     origin: ['http://localhost:5000']
+// }));
+app.use(cors());
 app.use(urlencoded({ extended: false }));
 app.use(json());
 

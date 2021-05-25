@@ -38,7 +38,7 @@ export const getEventById = async (
       .select({ __v: 0 })
       .populate({ path: 'creator', select: { password: 0, __v: 0 } });
 
-    event ? res.send({ data: event }) : res.status(404).send({});
+    event ? res.send( event ) : res.status(404).send({});
   } catch (e) {
     sendError(res, e);
   }
@@ -60,7 +60,7 @@ export const createEvent = async (
       creator: userId,
     });
 
-    res.send({ data: event });
+    res.status(201).send( event );
   } catch (e) {
     sendError(res, e);
   }
@@ -88,7 +88,7 @@ export const updateEvent = async (
       { new: true }
     ).select({ __v: 0 });
 
-    event ? res.send({ data: event }) : res.status(404).send({});
+    event ? res.send( event ) : res.status(404).send({});
   } catch (e) {
     sendError(res, e);
   }
@@ -115,7 +115,7 @@ export const partialUpdateEvent = async (
       event.photo = photo || event.photo;
 
       await event.save();
-      res.send({ data: event });
+      res.send( event );
     } else {
       res.status(404).send({});
     }

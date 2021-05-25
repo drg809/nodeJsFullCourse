@@ -67,7 +67,7 @@ export const subscribeParticipant = async (
       details,
     });
 
-    res.send({ data: participant });
+    res.status(201).send({ participant });
   } catch (e) {
     sendError(res, e);
   }
@@ -90,7 +90,7 @@ export const updateParticipant = async (
       participant.details = details || participant.details;
 
       await participant.save();
-      res.send({ data: participant });
+      res.send({ participant });
     } else {
       res.status(404).send({});
     }
