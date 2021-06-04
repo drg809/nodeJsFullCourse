@@ -14,9 +14,11 @@ const PORT: string = process.env.PORT!;
 const app: Application = express();
 
 // app.use(cors({
-//     origin: ['http://localhost:5000']
+//     origin: ['http://localhost:5000','http://192.168.1.202']
 // }));
+
 app.use(cors());
+
 app.use(urlencoded({ extended: false }));
 app.use(json());
 

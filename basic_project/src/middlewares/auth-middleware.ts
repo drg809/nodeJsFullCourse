@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
+import fs from 'fs';
 
 declare global {
   namespace Express {
@@ -53,4 +54,16 @@ export const checkIp = (
   } else {
     res.status(403).send('Acceso denegado');
   }
+};
+
+export const logIp = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
+  const dateTime = new Date();
+  fs.appendFile('log.txt', 'la ip ' + req.ip + ' ha entrado en '+ dateTime + ' este fue su body ' + JSON.stringify(req.body) + ' \n', function (err) {
+    if (err) throw err;
+  });
+  next();
 };

@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import * as eventsController from '../../controllers/v1/events-controllers';
-import { checkAuth, checkIp } from '../../middlewares/auth-middleware';
+import { checkAuth, checkIp, logIp } from '../../middlewares/auth-middleware';
 import { handleRequestErrors } from '../../middlewares/validator-middleware';
 import {
   validateNewEvent,
@@ -15,12 +15,14 @@ router.get('', eventsController.getEvents);
 router.post(
   '',
   checkAuth,
+  logIp,
   validateNewEvent,
   handleRequestErrors,
   eventsController.createEvent
 );
 router.get(
   '/:id',
+  logIp,
   validateObjectId,
   handleRequestErrors,
   eventsController.getEventById
@@ -29,6 +31,7 @@ router.delete(
   '/:id',
   checkIp,
   checkAuth,
+  logIp,
   validateObjectId,
   handleRequestErrors,
   eventsController.deleteEvent
@@ -36,6 +39,7 @@ router.delete(
 router.put(
   '/:id',
   checkAuth,
+  logIp,
   validateObjectId,
   validateNewEvent,
   handleRequestErrors,
@@ -44,6 +48,7 @@ router.put(
 router.patch(
   '/:id',
   checkAuth,
+  logIp,
   validateObjectId,
   validateUpdateEvent,
   handleRequestErrors,

@@ -105,7 +105,6 @@ export const deleteUser = async (
 };
 
 export const login = async (req: Request, res: Response): Promise<void> => {
-  console.log(req.body);
   try {
     const { email, password } = req.body;
 
